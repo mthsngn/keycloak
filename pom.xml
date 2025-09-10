@@ -36,6 +36,7 @@
 
     <properties>
         <!-- Maven -->
+        <sonar.organization>mthsngn</sonar.organization>
         <maven.version>3.9.8</maven.version>
         <maven.compiler.source>17</maven.compiler.source>
         <maven.compiler.target>17</maven.compiler.target>
