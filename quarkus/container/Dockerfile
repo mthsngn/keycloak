@@ -5,7 +5,11 @@ ARG KEYCLOAK_DIST=https://github.com/keycloak/keycloak/releases/download/$KEYCLO
 
 RUN dnf install -y tar gzip
 
+# Build officiel
 ADD $KEYCLOAK_DIST /tmp/keycloak/
+
+# Build custom
+# COPY keycloak-999.0.0-SNAPSHOT.tar.gz /tmp/keycloak/
 
 # The next step makes it uniform for local development and upstream built.
 # If it is a local tar archive then it is unpacked, if from remote is just downloaded.
