@@ -1,0 +1,31 @@
+version: "3.8"
+
+services:
+  sonarqube:
+    image: sonarqube:lts-community
+    container_name: sonarqube
+    ports:
+      - "9000:9000"
+    environment:
+      SONAR_ES_BOOTSTRAP_CHECKS_DISABLE: "true"
+    volumes:
+      - sonarqube_data:/opt/sonarqube/data
+      - sonarqube_extensions:/opt/sonarqube/extensions
+
+  maven-sonar:
+    image: maven:3.8.5-openjdk-17
+    working_dir: /usr/src/app
+    depends_on:
+      - sonarqube
+    volumes:
+      - .:/usr/src/app
+      - ~/.m2:/root/.m2
+    environment:
+      SONAR_TOKEN: ${SONAR_TOKEN}
+    command: >
+      bash -lc "mvn -e clean verify sonar:sonar -DskipTests -Dsonar.projectKey=keycloak -Dsonar.projectName='Keycloak' -Dsonar.host.url=http://sonarqube:9000 -Dsonar.token=$SONAR_TOKEN"
+
+
+volumes:
+  sonarqube_data:
+  sonarqube_extensions:
