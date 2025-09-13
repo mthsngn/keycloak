@@ -25,6 +25,22 @@ services:
     command: >
       bash -lc "mvn -e clean verify sonar:sonar -DskipTests -Dsonar.projectKey=keycloak -Dsonar.projectName='Keycloak' -Dsonar.host.url=http://sonarqube:9000 -Dsonar.token=$SONAR_TOKEN"
 
+  ui-sonar:
+    image: sonarsource/sonar-scanner-cli:latest
+    working_dir: /usr/src/app
+    depends_on:
+      - sonarqube
+    volumes:
+      - .:/usr/src/app
+    environment:
+      SONAR_TOKEN_UI: ${SONAR_TOKEN_UI}
+    command: >
+      -Dsonar.projectKey=keycloak-ui
+      -Dsonar.projectName=Keycloak-UI
+      -Dsonar.sources=.
+      -Dsonar.exclusions=**/*.java
+      -Dsonar.host.url=http://sonarqube:9000
+      -Dsonar.login=${SONAR_TOKEN_UI}
 
 volumes:
   sonarqube_data:
